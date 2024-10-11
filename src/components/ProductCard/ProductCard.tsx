@@ -14,7 +14,7 @@ interface ProductCardProps {
   product: Product;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <div className={styles.card}>
       <Link to={`/product/${product.id}`}>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../utils/config";
 import styles from "./ProductDetail.module.scss";
 
 interface Product {
@@ -18,7 +19,7 @@ const ProductDetail: React.FC = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+      const response = await fetch(`${API_BASE_URL}/${id}`);
       const data: Product = await response.json();
       setProduct(data);
     };

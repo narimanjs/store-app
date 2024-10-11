@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
+import { API_BASE_URL } from "../../utils/config";
+import { useFilterContext } from "../../context/FilterContext";
 import styles from "./ProductList.module.scss";
 
 interface Product {
@@ -21,37 +23,50 @@ const categories = [
 
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [sortOrder, setSortOrder] = useState<string>("asc");
-  const productsPerPage = 8;
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const productsPerPage = 4;
+
+  const {
+    searchQuery,
+    selectedCategory,
+    sortOrder,
+    currentPage,
+    setSearchQuery,
+    setSelectedCategory,
+    setSortOrder,
+    setCurrentPage,
+  } = useFilterContext();
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("https://fakestoreapi.com/products");
+      setIsLoading(true);
+      const response = await fetch(API_BASE_URL);
       const data: Product[] = await response.json();
       setProducts(data);
+      setIsLoading(false);
     };
     fetchData();
   }, []);
 
-  // Фильтрация по названию
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+    setCurrentPage(1);
   };
 
-  // Фильтрация по категории
   const handleCategoryFilter = (category: string) => {
     setSelectedCategory(category);
+    setCurrentPage(1);
   };
 
-  // Сортировка по цене
   const handleSort = (order: string) => {
     setSortOrder(order);
+    setCurrentPage(1);
   };
 
-  // Фильтрация, сортировка и поиск
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
   const filteredProducts = products
     .filter(
       product =>
@@ -64,7 +79,6 @@ const ProductList: React.FC = () => {
       sortOrder === "asc" ? a.price - b.price : b.price - a.price
     );
 
-  // Пагинация
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(
@@ -72,10 +86,7 @@ const ProductList: React.FC = () => {
     indexOfLastProduct
   );
 
-  // Общее количество страниц
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <div className={styles.container}>
@@ -111,12 +122,18 @@ const ProductList: React.FC = () => {
       </div>
 
       <div className={styles.grid}>
-        {currentProducts.map(product => (
-          <ProductCard
-            key={product.id}
-            product={product}
-          />
-        ))}
+        {isLoading ? (
+          <p>Loading products...</p>
+        ) : currentProducts.length > 0 ? (
+          currentProducts.map(product => (
+            <ProductCard
+              key={product.id}
+              product={product}
+            />
+          ))
+        ) : (
+          <p className={styles.noProducts}>Ничего не найдено</p>
+        )}
       </div>
 
       <div className={styles.pagination}>
