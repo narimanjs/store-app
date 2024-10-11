@@ -1,4 +1,4 @@
-# https://narimanjs.github.io/store-app
+# https://store-app-wine-theta.vercel.app/
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
