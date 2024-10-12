@@ -1,7 +1,6 @@
 import styles from "./Header.module.scss";
 
 const Header = () => {
-  // Функция для перезагрузки страницы
   const reloadPage = () => {
     window.location.reload();
   };

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "../../utils/config";
+import { API_BASE_URL } from "#utils/config";
 import styles from "./ProductDetail.module.scss";
 
 interface Product {
@@ -12,7 +12,7 @@ interface Product {
   category: string;
 }
 
-const ProductDetail: React.FC = () => {
+const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const navigate = useNavigate();

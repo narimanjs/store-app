@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import ProductCard from "../../components/ProductCard/ProductCard";
-import { API_BASE_URL } from "../../utils/config";
-import { useFilterContext } from "../../context/FilterContext";
+import ProductCard from "#components/ProductCard/ProductCard";
+import { API_BASE_URL } from "#utils/config";
+import { useFilterContext } from "#context/FilterContext";
 import styles from "./ProductList.module.scss";
 
 interface Product {
